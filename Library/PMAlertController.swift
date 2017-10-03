@@ -16,6 +16,7 @@ import UIKit
 @objc open class PMAlertController: UIViewController {
     
     // MARK: Properties
+    fileprivate var dismissCompletion: (() -> Void)?
     @IBOutlet weak open var alertMaskBackground: UIImageView!
     @IBOutlet weak open var alertView: UIView!
     @IBOutlet weak open var alertViewWidthConstraint: NSLayoutConstraint!
@@ -50,7 +51,7 @@ import UIKit
     
     
     //MARK: - Initialiser
-    @objc public convenience init(title: String, description: String, image: UIImage?, style: PMAlertControllerStyle) {
+    @objc public convenience init(title: String, description: String, image: UIImage?, style: PMAlertControllerStyle, completionOnDismiss: (() -> Void)? = nil) {
         self.init()
         let nib = loadNibAlertController()
         if nib != nil{
@@ -64,7 +65,7 @@ import UIKit
         (image != nil) ? (alertImage.image = image) : (headerViewHeightConstraint.constant = 0)
         alertTitle.text = title
         alertDescription.text = description
-        
+        self.dismissCompletion = completionOnDismiss
         
         //if alert width = 270, else width = screen width - 36
         style == .alert ? (alertViewWidthConstraint.constant = 270) : (alertViewWidthConstraint.constant = UIScreen.main.bounds.width - 36)
@@ -95,7 +96,7 @@ import UIKit
     
     @objc fileprivate func dismissAlertController(_ sender: PMAlertAction){
         self.animateDismissWithGravity(sender.actionStyle)
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true, completion: dismissCompletion)
     }
     
     @objc fileprivate func dismissAlertControllerFromBackgroundTap() {
@@ -104,7 +105,7 @@ import UIKit
         }
         
         self.animateDismissWithGravity(.cancel)
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true, completion: dismissCompletion)
     }
 
     //MARK: - Text Fields

@@ -24,8 +24,9 @@ class ViewController: UIViewController {
     }
     
     @IBAction func showAlert(_ sender: AnyObject) {
-        let alertVC = PMAlertController(title: "Locate your device", description: "Enables access to your location: discover what you can do when you're traveling and what is available near you.", image: UIImage(named: "flag.png"), style: .alert) //Image by freepik.com, taken on flaticon.com
-        
+        let alertVC = PMAlertController(title: "Locate your device", description: "Enables access to your location: discover what you can do when you're traveling and what is available near you.", image: UIImage(named: "flag.png"), style: .alert) {
+            print("Yay!! being dismissed")
+        }
         alertVC.addAction(PMAlertAction(title: "Cancel", style: .cancel, action: { () -> Void in
             print("Cancel")
         }))
